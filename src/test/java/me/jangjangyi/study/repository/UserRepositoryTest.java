@@ -23,8 +23,8 @@ public class UserRepositoryTest {
     @Test
     public void create() {
         User user = new User();
-        user.setAccount("TestUser02");
-        user.setEmail("TestUser02@naver.com");
+        user.setAccount("TestUser07");
+        user.setEmail("TestUser07@naver.com");
         user.setPhoneNumber("010-2222-2222");
         user.setCreatedAt(LocalDateTime.now());
         user.setCreatedBy("admin");
