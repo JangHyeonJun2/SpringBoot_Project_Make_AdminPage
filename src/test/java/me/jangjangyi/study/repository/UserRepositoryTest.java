@@ -1,11 +1,16 @@
 package me.jangjangyi.study.repository;
 
 import me.jangjangyi.study.model.entity.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
 
 //@DataJpaTest
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -54,8 +59,20 @@ public class UserRepositoryTest {
             userRepository.save(user1);
         });
     }
-
+    @Test
     public void delete() {
+//        Optional<User> user = userRepository.findById(10L);
+//
+//        assertThat(user.isPresent());
 
+//        user.ifPresent(user1 ->
+//                System.out.println("ID" + user1.getId()));
+
+//        user.ifPresent(user1 -> {
+//            userRepository.delete(user1);
+//        });
+
+        Optional<User> deleteUser = userRepository.findById(1L);
+        assertThat(deleteUser).isEmpty();
     }
 }
