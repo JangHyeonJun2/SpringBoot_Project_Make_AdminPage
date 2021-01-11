@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -22,9 +23,16 @@ class ItemRepositoryTest {
     @Test
     public void create() {
         Item item = new Item();
-        item.setName("pen");
-        item.setPrice(20000);
-        item.setContent("is pen");
+        item.setStatus("UNREGISTERED");
+        item.setName("IPhone");
+        item.setTitle("IPhone12 Pro");
+        item.setContent("21년형");
+        item.setPrice(10000000);
+        item.setBrandName("APPLE");
+        item.setRegisteredAt(LocalDateTime.now());
+        item.setCreatedAt(LocalDateTime.now());
+        item.setCreatedBy("Partner01");
+        item.setPartnerId(1L);
 
         Item newItem = itemRepository.save(item);
         Assertions.assertThat(newItem).isNotNull();
