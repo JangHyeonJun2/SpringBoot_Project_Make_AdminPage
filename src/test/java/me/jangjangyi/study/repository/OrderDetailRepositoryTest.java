@@ -28,7 +28,7 @@ class OrderDetailRepositoryTest {
         orderDetail.setTotalPrice(BigDecimal.valueOf(1000000));
 
 //        orderDetail.setOrderGroupId(1L);
-        orderDetail.setItemId(1L);
+//        orderDetail.setItemId(1L);
 
         orderDetail.setCreatedAt(LocalDateTime.now());
         orderDetail.setCreatedBy("AdminServer");
