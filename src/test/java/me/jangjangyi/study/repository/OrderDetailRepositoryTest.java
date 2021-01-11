@@ -24,26 +24,13 @@ class OrderDetailRepositoryTest {
 
     @Test
     public void create() {
-        OrderDetail orderDetail = new OrderDetail();
-        Optional<Item> findItem = itemRepository.findById(1L);
-        Optional<User> findUser = userRepository.findById(1L);
 
-        orderDetail.setOrderAt(LocalDateTime.now());
-        orderDetail.setUser(findUser.get());
-        orderDetail.setItem(findItem.get());
-
-        orderDetailRepository.save(orderDetail);
 
 
 
     }
     @Test
     public void update() {
-        Optional<OrderDetail> orderDetail = orderDetailRepository.findById(1L);
-        orderDetail.ifPresent(findItem -> {
-            Item item = findItem.getItem();
-            item.setId(3L);
-            orderDetailRepository.save(findItem);
-        });
+
     }
 }

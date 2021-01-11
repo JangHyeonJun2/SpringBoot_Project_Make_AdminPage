@@ -24,61 +24,35 @@ public class UserRepositoryTest {
 
     @Test
     public void create() {
-        User user = new User();
-        user.setAccount("TestUser02");
-        user.setEmail("TestUser02@naver.com");
-        user.setPhoneNumber("010-2222-2222");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("admin");
+        String account = "Test01";
+        String password = "Test01";
+        String status = "REGISTERED";
+        String email = "Test01@naver.com";
+        String phoneNumber = "010-111-2222";
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        String createdBy = "AdminServer";
 
+        User user = new User();
+        user.setAccount(account);
+        user.setPassword(password);
+        user.setStatus(status);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+        user.setCreatedAt(createdAt);
+        user.setCreatedBy(createdBy);
 
         User newUser = userRepository.save(user);
 
-        System.out.println("newUser : " + newUser);
+        Assertions.assertThat(newUser).isNotNull();
 
     }
 
     @Test
     @Transactional
     public void read() {
-//        Optional<User> user = userRepository.findById(1L);
-
-        Optional<User> user = userRepository.findByAccount("TestUser01");
-        user.ifPresent(user1 -> {
-            user1.getOrderDetailList().stream().forEach(orderDetail -> {
-                Item item = orderDetail.getItem();
-                System.out.println(item);
-            });
-
-        });
-
-    }
-    @Test
-    public void update() {
-        Optional<User> user = userRepository.findById(1L);
-
-        user.ifPresent(user1 -> {
-            user1.setAccount("pppp");
-            user1.setUpdatedAt(LocalDateTime.now());
-            user1.setUpdatedBy("update method()");
-
-            userRepository.save(user1);
-        });
-    }
-    @Test
-    public void delete() {
-//        Optional<User> user = userRepository.findById(10L);
-//
-//        assertThat(user.isPresent());
-
-//        user.ifPresent(user1 ->
-//                System.out.println("ID" + user1.getId()));
-
-//        user.ifPresent(user1 -> {
-//            userRepository.delete(user1);
-//        });
-
-        Optional<User> deleteUser = userRepository.findById(1L);
-        assertThat(deleteUser).isEmpty();
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-111-2222");
+        Assertions.assertThat(user).isNotNull();
     }
 }
