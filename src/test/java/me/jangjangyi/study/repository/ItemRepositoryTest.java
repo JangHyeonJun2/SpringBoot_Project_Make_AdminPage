@@ -22,9 +22,9 @@ class ItemRepositoryTest {
     @Test
     public void create() {
         Item item = new Item();
-        item.setName("noteBook");
-        item.setPrice(100000);
-        item.setContent("is notebook");
+        item.setName("pen");
+        item.setPrice(20000);
+        item.setContent("is pen");
 
         Item newItem = itemRepository.save(item);
         Assertions.assertThat(newItem).isNotNull();
@@ -32,8 +32,21 @@ class ItemRepositoryTest {
 
     @Test
     public void read() {
+        Optional<Item> item = itemRepository.findById(1L);
+        item.ifPresent(findItem -> {
+            System.out.println(findItem.getId() + ", " + findItem.getName());
+        });
+    }
+
+    @Test
+    public void update() {
         Optional<Item> item = itemRepository.findById(3L);
-        Assertions.assertThat(item).isNotNull();
+        item.ifPresent(findItem -> {
+            findItem.setId(1L);
+            itemRepository.save(findItem);
+        });
+
+
     }
 
 }

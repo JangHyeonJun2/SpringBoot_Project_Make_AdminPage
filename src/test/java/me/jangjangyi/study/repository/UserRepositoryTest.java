@@ -1,10 +1,12 @@
 package me.jangjangyi.study.repository;
 
+import me.jangjangyi.study.model.entity.Item;
 import me.jangjangyi.study.model.entity.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -23,8 +25,8 @@ public class UserRepositoryTest {
     @Test
     public void create() {
         User user = new User();
-        user.setAccount("TestUser07");
-        user.setEmail("TestUser07@naver.com");
+        user.setAccount("TestUser02");
+        user.setEmail("TestUser02@naver.com");
         user.setPhoneNumber("010-2222-2222");
         user.setCreatedAt(LocalDateTime.now());
         user.setCreatedBy("admin");
@@ -37,12 +39,15 @@ public class UserRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void read() {
         Optional<User> user = userRepository.findById(1L);
 
         user.ifPresent(user1 -> {
-            System.out.println("user : " +user1);
-            System.out.println("email : " + user1.getEmail());
+            user1.getOrderDetailList().stream().forEach(orderDetail -> {
+                Item item = orderDetail.getItem();
+                System.out.println(item);
+            });
 
         });
 
