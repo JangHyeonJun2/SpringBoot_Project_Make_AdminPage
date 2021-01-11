@@ -41,8 +41,9 @@ public class UserRepositoryTest {
     @Test
     @Transactional
     public void read() {
-        Optional<User> user = userRepository.findById(1L);
+//        Optional<User> user = userRepository.findById(1L);
 
+        Optional<User> user = userRepository.findByAccount("TestUser01");
         user.ifPresent(user1 -> {
             user1.getOrderDetailList().stream().forEach(orderDetail -> {
                 Item item = orderDetail.getItem();
