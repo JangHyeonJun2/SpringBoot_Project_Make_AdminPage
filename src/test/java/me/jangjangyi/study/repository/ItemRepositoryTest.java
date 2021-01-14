@@ -36,6 +36,8 @@ class ItemRepositoryTest {
 
         Item newItem = itemRepository.save(item);
         Assertions.assertThat(newItem).isNotNull();
+
+
     }
 
     @Test

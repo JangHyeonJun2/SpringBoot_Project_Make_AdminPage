@@ -36,6 +36,8 @@ public class CategoryRepositoryTest {
         assertThat(newCategory).isNotNull();
         assertThat(newCategory.getType()).isEqualTo(type);
         assertThat(newCategory.getTitle()).isEqualTo(title);
+
+        category.setTitle("").setType("");
     }
 
     @Test

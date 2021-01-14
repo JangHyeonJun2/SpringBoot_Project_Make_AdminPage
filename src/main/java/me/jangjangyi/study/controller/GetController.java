@@ -1,6 +1,7 @@
 package me.jangjangyi.study.controller;
 
 import me.jangjangyi.study.model.SearchParam;
+import me.jangjangyi.study.model.network.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,6 +28,13 @@ public class GetController {
         System.out.println(searchParam.getPage());
 
         return searchParam;
+    }
+
+    @GetMapping("/header")
+    public Header getHeader() {
+
+        //{"resultCode: "OK" , "description" : "OK"}
+        return Header.builder().resultCode("OK").description("OK").build();
     }
 
 }
