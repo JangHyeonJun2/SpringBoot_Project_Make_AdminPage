@@ -1,19 +1,26 @@
 package me.jangjangyi.study.controller.api;
 
+import lombok.RequiredArgsConstructor;
 import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.ItemApiRequest;
 import me.jangjangyi.study.model.network.response.ItemApiResponse;
+import me.jangjangyi.study.service.ItemApiLogicService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/item")
+@RequiredArgsConstructor
 public class ItemApiController implements CrudInterface<ItemApiRequest, ItemApiResponse> {
+
+    private final ItemApiLogicService itemApiLogicService;
+
     @Override
     @PostMapping("") // /api/item
     public Header<ItemApiResponse> create(@RequestBody Header<ItemApiRequest> request) {
-        return null;
+        return itemApiLogicService.create(request);
     }
 
     @Override
