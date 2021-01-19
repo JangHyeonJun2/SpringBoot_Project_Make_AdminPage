@@ -31,12 +31,12 @@ public class OrderGroupApiController implements CrudInterface<OrderGroupApiReque
     @Override
     @PutMapping("")
     public Header<OrderGroupApiReponse> update(@RequestBody Header<OrderGroupApiRequest> request) {
-        return null;
+        return orderGroupApiLogicService.update(request);
     }
 
     @Override
     @DeleteMapping("{id}")
     public Header delete(@PathVariable Long id) {
-        return null;
+        return orderGroupApiLogicService.delete(id);
     }
 }

@@ -53,12 +53,39 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
     @Override
     public Header<OrderGroupApiReponse> update(Header<OrderGroupApiRequest> request) {
-        return null;
+        OrderGroupApiRequest body = request.getData();
+
+        return orderGroupRepository.findById(body.getId())
+                .map(orderGroup -> {
+                    orderGroup
+                            .setStatus(body.getStatus())
+                            .setOrderType(body.getOrderType())
+                            .setRevAddress(body.getRevAddress())
+                            .setRevName(body.getRevName())
+                            .setPaymentType(body.getPaymentType())
+                            .setTotalQuantity(body.getTotalQuantity())
+                            .setTotalPrice(body.getTotalPrice())
+                            .setOrderAt(body.getOrderAt())
+                            .setArrivalDate(body.getArrivalDate())
+                            .setUser(userRepository.getOne(body.getUserId()));
+                    return orderGroup;
+
+                })
+                .map(orderGroup -> orderGroupRepository.save(orderGroup))
+                .map(orderGroup -> response(orderGroup))
+                .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+
     }
 
     @Override
     public Header delete(Long id) {
-        return null;
+        return orderGroupRepository.findById(id)
+                .map(orderGroup -> {
+                    orderGroupRepository.delete(orderGroup); //delete는 반환값이 없기 떄문에 따로 return값을 설정해줘야한다.
+                    return Header.OK();
+                })
+                .orElseGet(() -> Header.ERROR("데이터 없습니다."));
+
     }
 
     private Header<OrderGroupApiReponse> response(OrderGroup orderGroup) {
