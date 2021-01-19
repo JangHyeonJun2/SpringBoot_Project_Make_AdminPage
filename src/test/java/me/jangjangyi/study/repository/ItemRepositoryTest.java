@@ -27,7 +27,7 @@ class ItemRepositoryTest {
         item.setName("IPhone");
         item.setTitle("IPhone12 Pro");
         item.setContent("21년형");
-        item.setPrice(10000000);
+//        item.setPrice(10000000);
         item.setBrandName("APPLE");
         item.setRegisteredAt(LocalDateTime.now());
         item.setCreatedAt(LocalDateTime.now());
