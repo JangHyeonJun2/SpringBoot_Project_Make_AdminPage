@@ -31,7 +31,7 @@ public class PartnerApiController implements CrudInterface<PartnerApiRequest, Pa
     @Override
     @PutMapping("")
     public Header<PartnerApiReponse> update(@RequestBody Header<PartnerApiRequest> request) {
-        return null;
+        return partnerApiLogicService.update(request);
     }
 
     @Override
