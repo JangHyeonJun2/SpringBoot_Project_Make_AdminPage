@@ -41,7 +41,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
     @Override
     public Header<PartnerApiReponse> read(Long id) {
-        return null;
+        return partnerRepository.findById(id).map(this::response).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
     @Override
