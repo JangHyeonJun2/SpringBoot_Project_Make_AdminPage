@@ -12,15 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiReponse> {
     @Autowired
-    OrderDetailRepository orderDetailRepository;
+    private OrderDetailRepository orderDetailRepository;
+
     @Autowired
-    OrderGroupRepository orderGroupRepository;
+    private OrderGroupRepository orderGroupRepository;
+
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
 
     @Override
     public Header<OrderDetailApiReponse> create(Header<OrderDetailApiRequest> request) {
@@ -41,12 +44,28 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 
     @Override
     public Header<OrderDetailApiReponse> read(Long id) {
-        return null;
+        return orderDetailRepository.findById(id).map(orderDetail -> response(orderDetail)).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
     @Override
     public Header<OrderDetailApiReponse> update(Header<OrderDetailApiRequest> request) {
-        return null;
+        OrderDetailApiRequest body = request.getData();
+        return orderDetailRepository.findById(body.getId())
+                .map(orderDetail -> {
+                    orderDetail
+                            .setStatus(body.getStatus())
+                            .setQuantity(body.getQuantity())
+                            .setTotalPrice(body.getTotalPrice())
+                            .setArrivalDate(LocalDateTime.now())
+                            .setItem(itemRepository.getOne(body.getItemId()))
+                            .setOrderGroup(orderGroupRepository.getOne(body.getOrderGroupId()));
+
+                    return orderDetail;
+                }).map(newOrderDetail -> {
+                    orderDetailRepository.save(newOrderDetail);
+                    return newOrderDetail;
+                }).map(orderDetail -> response(orderDetail)).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+
     }
 
     @Override

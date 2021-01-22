@@ -26,13 +26,13 @@ public class OrderDetailApiController implements CrudInterface<OrderDetailApiReq
     @Override
     @GetMapping("{id}")
     public Header<OrderDetailApiReponse> read(@PathVariable Long id) {
-        return null;
+        return orderDetailApiLogicService.read(id);
     }
 
     @Override
     @PutMapping("")
-    public Header<OrderDetailApiReponse> update(@PathVariable Header<OrderDetailApiRequest> request) {
-        return null;
+    public Header<OrderDetailApiReponse> update(@RequestBody Header<OrderDetailApiRequest> request) {
+        return orderDetailApiLogicService.update(request);
     }
 
     @Override
