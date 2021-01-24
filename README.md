@@ -204,6 +204,54 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest,ItemApi
 
 1. 원래 코드는 **.registeredAt(body.getRegisteredAt())** 으로 받았었지만 생각해보면 사용자가 상품을 생성하면서 날짜를 기입하지 않고 서버에서 자동적으로 만들어서 보여줘야한다. 그래서 **원래 코드**에서 **.registeredAt(LocalDateTime.now())**처럼 자동적으로 현재의 날짜와 시간을 넣어주고 item객체에 저장해야한다. 그러면 현재의 날짜를 가진 item객체가 생성되어  **Item newItem = itemRepository.save(item);**코드에서 DB에 정상적으로 저장이되며 response에도 정상적으로 보여준다.
 
+
+
+### OrderGroupApiController에서의 문제점
+
+#### Srping boot @RequestBody로 Json 데이터 받을 시 Json parse error
+
+- 아래는 변경전 코드이다. 애너테이션을 보면 @RequiredArgsConstructor 애너테이션이다. 이 애너테이션은 DI관련 애너테이션인데 만약 필드에 빈을 주입 받을 객체가 하나 밖에 없다면 이 애너테이션을 사용하여 자동적으로 생성자 빈주입을 만들어준다. 하지만 규칙이 있는데 **필드에서 private final** 을 꼭꼭꼭 붙여줘야하는 것이다.!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+```java
+@RestController
+@RequestMapping("/api/orderGroup")
+@RequiredArgsConstructor
+public class OrderGroupApiController implements CrudInterface<OrderGroupApiRequest, OrderGroupApiReponse> {
+
+    변경전
+    //OrderGroupApiLogicService orderGroupApiLogicService;
+      
+    변경후
+      private final OrderGroupApiLogicService orderGroupApiLogicService;
+
+    @Override
+    @PostMapping("")
+    public Header<OrderGroupApiReponse> create(@RequestBody Header<OrderGroupApiRequest> request) {
+        return orderGroupApiLogicService.create(request);
+    }
+
+    @Override
+    @GetMapping("{id}")
+    public Header<OrderGroupApiReponse> read(@PathVariable Long id) {
+        return null;
+    }
+
+    @Override
+    @PutMapping("")
+    public Header<OrderGroupApiReponse> update(@RequestBody Header<OrderGroupApiRequest> request) {
+        return null;
+    }
+
+    @Override
+    @DeleteMapping("{id}")
+    public Header delete(@PathVariable Long id) {
+        return null;
+    }
+}
+```
+
+
+
 --------
 
 # 프로젝트 진행
