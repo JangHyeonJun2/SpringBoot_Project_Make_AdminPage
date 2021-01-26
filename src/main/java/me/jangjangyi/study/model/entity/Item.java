@@ -3,6 +3,7 @@ package me.jangjangyi.study.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.jangjangyi.study.model.enumclass.ItemStatus;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,7 +28,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ItemStatus status;
 
     private String name;
 

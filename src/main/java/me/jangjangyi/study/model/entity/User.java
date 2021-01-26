@@ -2,6 +2,7 @@ package me.jangjangyi.study.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.jangjangyi.study.model.enumclass.UserStatus;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,7 +29,8 @@ public class User {
 
     private String password;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     private String email;
 

@@ -2,6 +2,7 @@ package me.jangjangyi.study.model.entity;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import me.jangjangyi.study.model.enumclass.OrderType;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,7 +29,8 @@ public class OrderGroup {
 
     private String status;
 
-    private String orderType; //주문의 형태 - 일괄 또는 개별
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType; //주문의 형태 - 일괄 또는 개별
 
     private String revAddress;//수신 주소
 

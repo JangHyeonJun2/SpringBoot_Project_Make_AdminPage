@@ -2,6 +2,7 @@ package me.jangjangyi.study.service;
 
 import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.User;
+import me.jangjangyi.study.model.enumclass.UserStatus;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.UserApiRequest;
 import me.jangjangyi.study.model.network.response.UserApiResponse;
@@ -29,7 +30,7 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
         User user = User.builder()
                 .account(userApiRequest.getAccount())
                 .password(userApiRequest.getPassword())
-                .status("REGISTERED")
+                .status(UserStatus.REGISTERED)
                 .phoneNumber(userApiRequest.getPhoneNumber())
                 .email(userApiRequest.getEmail())
                 .registeredAt(LocalDateTime.now())
