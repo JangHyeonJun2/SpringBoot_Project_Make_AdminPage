@@ -1,18 +1,14 @@
 package me.jangjangyi.study.service;
 
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.Item;
-import me.jangjangyi.study.model.enumclass.ItemStatus;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.ItemApiRequest;
 import me.jangjangyi.study.model.network.response.ItemApiResponse;
-import me.jangjangyi.study.repository.ItemRepository;
 import me.jangjangyi.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiResponse,Item> {

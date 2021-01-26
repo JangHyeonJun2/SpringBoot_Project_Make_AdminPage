@@ -1,13 +1,10 @@
 package me.jangjangyi.study.service;
 
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.User;
 import me.jangjangyi.study.model.enumclass.UserStatus;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.UserApiRequest;
 import me.jangjangyi.study.model.network.response.UserApiResponse;
-import me.jangjangyi.study.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

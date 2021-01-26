@@ -1,12 +1,9 @@
 package me.jangjangyi.study.service;
 
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.Category;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.CategoryApiRequest;
 import me.jangjangyi.study.model.network.response.CategoryApiResponse;
-import me.jangjangyi.study.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

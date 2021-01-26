@@ -1,12 +1,9 @@
 package me.jangjangyi.study.service;
 
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.AdminUser;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.AdminUserApiRequest;
 import me.jangjangyi.study.model.network.response.AdminUserApiResponse;
-import me.jangjangyi.study.repository.AdminUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

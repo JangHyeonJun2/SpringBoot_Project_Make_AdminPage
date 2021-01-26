@@ -1,18 +1,15 @@
 package me.jangjangyi.study.service;
 
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.OrderDetail;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.OrderDetailApiRequest;
 import me.jangjangyi.study.model.network.response.OrderDetailApiReponse;
 import me.jangjangyi.study.repository.ItemRepository;
-import me.jangjangyi.study.repository.OrderDetailRepository;
 import me.jangjangyi.study.repository.OrderGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class OrderDetailApiLogicService extends BaseService<OrderDetailApiRequest, OrderDetailApiReponse,OrderDetail> {

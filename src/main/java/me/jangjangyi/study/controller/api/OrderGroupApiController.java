@@ -2,16 +2,11 @@ package me.jangjangyi.study.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import me.jangjangyi.study.controller.CrudController;
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.OrderGroup;
-import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.OrderGroupApiRequest;
 import me.jangjangyi.study.model.network.response.OrderGroupApiReponse;
-import me.jangjangyi.study.service.OrderGroupApiLogicService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/orderGroup")

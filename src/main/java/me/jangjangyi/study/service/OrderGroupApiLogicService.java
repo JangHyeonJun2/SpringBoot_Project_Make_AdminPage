@@ -1,12 +1,9 @@
 package me.jangjangyi.study.service;
 
-import lombok.RequiredArgsConstructor;
-import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.entity.OrderGroup;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.OrderGroupApiRequest;
 import me.jangjangyi.study.model.network.response.OrderGroupApiReponse;
-import me.jangjangyi.study.repository.OrderGroupRepository;
 import me.jangjangyi.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
