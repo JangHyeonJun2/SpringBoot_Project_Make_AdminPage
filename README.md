@@ -853,3 +853,252 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
     ```
 
     - 생성자가 하나이면 @RequiredArgsConstructor로 자동적으로 생성자를 만들어 Bean을 주입해준다.
+
+---------------------
+
+#### AdminUser update Controller와 Service만들기
+
+1. **Controller**에서  **Service**로 넘겨줄때 사용자가 비밀번호를 변경할 때와 변경하지 않을 때를 구분하여 **Service**를 구현하기.
+
+   ```java
+   @Override
+       public Header<AdminUserApiResponse> update(Header<AdminUserApiRequest> request) {
+           AdminUserApiRequest body = request.getData();
+           Optional<AdminUser> byId = adminUserRepository.findById(body.getId());
+           Optional<String> userPassword = byId.map(adminUser -> {
+               return adminUser.getPassword();
+           });
+           if (userPassword != null) {
+               if (!body.getPassword().equals(userPassword)){
+                   System.out.println("비밀번호 바꾸기");
+                   return adminUserRepository.findById(body.getId())
+                           .map(adminUser -> {
+                               adminUser
+                                       .setAccount(body.getAccount())
+                                       .setPassword(body.getPassword())
+                                       .setStatus(body.getStatus())
+                                       .setRole(body.getRole())
+                                       .setLoginFailCount(body.getLoginFailCount())
+                                       .setPasswordUpdatedAt(LocalDateTime.now());
+                               return adminUser;
+                           })
+                           .map(newAdminUser -> adminUserRepository.save(newAdminUser))
+                           .map(adminUser -> response(adminUser))
+                           .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+               }
+           }
+   
+           System.out.println("비밀번호 안바꾸기");
+           return adminUserRepository.findById(body.getId())
+                   .map(adminUser -> {
+                       adminUser
+                               .setAccount(adminUser.getAccount())
+                               .setStatus(adminUser.getStatus())
+                               .setLoginFailCount(adminUser.getLoginFailCount())
+                               .setRole(adminUser.getRole());
+                       return adminUser;
+                   })
+                   .map(newAdminUser -> adminUserRepository.save(newAdminUser))
+                   .map(adminUser -> response(adminUser))
+                   .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+   
+       }
+   ```
+
+   - 사용자가 비밀번호를 바꾸면 id로 조회를 하여 원래 저장되어있는  AdminUser객체와 사용자가 작성한 화면에서의 비밀번호를 비교를 합니다. 비밀번호가 같지 않다면 사용자가 비밀번호를 변경한 것으로 간주하여 set메서드를 통하여 비밀번호를 바꿔줍니다. 또한 여기서 .setPasswordUpdatedAt(LocalDateTime.now());이 메서드로 비밀번호를 바꿔준 시간을 현재로 바꿔줍니다. 만약에 비밀번호를 바꿔주지 않았으면 이 메서드를 호출할 필요는 없습니다.
+
+
+
+----------
+
+### Controller 추상화 시키기
+
+1. controller 패키지에 추상클래스로 CrudController.java를 생성합니다. 그리고 각 Controller에 보면 create, read, update, delete가 중복해서 계속해서 사용되고 있습니다. 이러한 코드를 하나의 클래스에 구현하고 이 클래스를 사용하는 방법입니다. 코드는 아래와 같습니다.
+
+   ```java
+   package me.jangjangyi.study.controller;
+   
+   import me.jangjangyi.study.ifs.CrudInterface;
+   import me.jangjangyi.study.model.network.Header;
+   import org.springframework.web.bind.annotation.*;
+   
+   public abstract class CrudController<Req,Res> implements CrudInterface<Req,Res> {
+   
+       protected CrudInterface<Req,Res> baseService;
+   
+       @Override
+       @PostMapping("")
+       public Header<Res> create(@RequestBody Header<Req> request) {
+           return baseService.create(request);
+       }
+   
+       @Override
+       @GetMapping("{id}")
+       public Header<Res> read(@PathVariable Long id) {
+           return baseService.read(id);
+       }
+   
+       @Override
+       @PutMapping("")
+       public Header<Res> update(@RequestBody Header<Req> request) {
+           return baseService.update(request);
+       }
+   
+       @Override
+       @DeleteMapping("{id}")
+       public Header delete(@PathVariable Long id) {
+           return baseService.delete(id);
+       }
+   }
+   
+   ```
+
+   이렇게 추상클래스로 기존의 각 클래스에 있던 CRUD를 제네릭으로 받을 수 있게 구현 해놓았습니다. 
+
+   1. 각 Controller클래스에서 추상클래스를 상속하고 CrudController<Req,Res>에 각 클래스에 맞는 Request와 Response를 넣으면 됩니다.<br>ItemApiController를 보겠습니다.
+
+      ```java
+      @RestController
+      @RequestMapping("/api/item")
+      @RequiredArgsConstructor
+      public class ItemApiController extends CrudController<ItemApiRequest,ItemApiResponse> {
+      
+          private final ItemApiLogicService itemApiLogicService;
+      
+          @PostConstruct
+          public void init(){
+              this.baseService = itemApiLogicService;
+          }
+      }
+      
+      ```
+
+      위의 코드를 보시면 CrudController<ItemApiRequest,ItemApiResponse>를 상속을 받았고, ItemApiLogicService에 빈을 주입합니다.
+
+      그리고 @PostConstruct애너테이션을 사용하여 ItemApiController가 생성될 때 init() 메서드를 만들어서 baseService 필드에 itemApiLogicService를 넣어줍니다. 그러면 위에 구현한 코드에서 보시면 baseService에  itemApiLogicService이 객체가 들어가서 원래의 코드처럼 정상적으로 동작을 합니다.
+
+
+
+----------------------------------
+
+## Service 추상화
+
+1. 추상 BaseService.java 클래스를 생성합니다.
+
+   ```java
+   //Item클래스로 예를 들었습니다.
+   @Component
+   public abstract class BaseService<Req,Res,Entity> implements CrudInterface<Req,Res> {
+   
+       @Autowired(required = false)
+       protected JpaRepository<Entity,Long> baseRepository;
+   
+   }
+   ```
+
+   BaseService클래스에 제네릭으로 Req,Res,Entity로 받습니다. 이렇게 제네릭으로 하는 이유는 각 Entity들을 받아올수 있게 하기위함이고 Entity를 추가로 받는 이유는 각 ServiceApiLogic클래스들에서 해당 클래스의 Repository를 사용하고 있다. Repository도 제네릭으로 Entity를 받아서 실행시켜주기 위함이다.<br>또한  **JpaRepository를 빈으로 주입을 해줘야 각 해당 ApiLogicService들에서 사용할 수 있습니다.**
+
+2. 원래 implements로 CrudInterface 상속받았던 것을 BaseService로 바꿔줍니다.
+
+   ```java
+   @Service
+   public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiResponse,Item> {
+       @Autowired
+       private PartnerRepository partnerRepository;
+   
+   
+       @Override
+       public Header<ItemApiResponse> create(Header<ItemApiRequest> request) {
+   
+           ItemApiRequest body = request.getData();
+   
+           Item item = Item.builder()
+                   .status(body.getStatus())
+                   .name(body.getName())
+                   .title(body.getTitle())
+                   .content(body.getContent())
+                   .price(body.getPrice())
+                   .brandName(body.getBrandName())
+                   .registeredAt(LocalDateTime.now())
+                   .partner(partnerRepository.getOne(body.getPartnerId()))
+                   .build();
+   
+           Item newItem = baseRepository.save(item);
+           return response(newItem);
+   
+       }
+   ```
+
+   위 코드에서 BaseService를 상속을 받고 제네릭타입에 해당 Entity를 넣어줘야합니다. 또한 이제 BaseService에서 JpaRepository를 proteced로 필드를 구현했기 때문에 상속받은 객체에서 사용할 수 있습니다. 그래서 ItemRepository를 사용하기 위해서는 baseRepository를 사용하면 된다.
+
+3. Controller와 CrudController 수정하기.
+
+   - 이전 코드에서는 ItemApiController객체가 생성될 때 @PostConstruct 애너테이션을 사용하여 상속받은 CrudController에서의 baseService필드에 ItemApiLogicService를 넣어줬다.
+
+     ```java
+     --변경 전
+     @RestController
+     @RequestMapping("/api/item")
+     @RequiredArgsConstructor
+     public class ItemApiController extends CrudController<ItemApiRequest,ItemApiResponse> {
+     
+         private final ItemApiLogicService itemApiLogicService;
+     
+         @PostConstruct
+         public void init(){
+             this.baseService = itemApiLogicService;
+         }
+     }
+     ```
+
+     ```java
+     --변경 후(CrudController의 제네릭에 Entity를 하나 더 받는다.)
+       @RestController
+     @RequestMapping("/api/item")
+     @RequiredArgsConstructor
+     public class ItemApiController extends CrudController<ItemApiRequest,ItemApiResponse, Item> {
+     
+     }
+     ```
+
+4. CrudController에서 BaseService 정보 넘겨주기.
+
+   ```java
+   public abstract class CrudController<Req,Res,Entity> implements CrudInterface<Req,Res> {
+   
+       @Autowired(required = false)
+       protected BaseService<Req,Res,Entity> baseService;
+   
+       @Override
+       @PostMapping("")
+       public Header<Res> create(@RequestBody Header<Req> request) {
+           return baseService.create(request);
+       }
+   
+       @Override
+       @GetMapping("{id}")
+       public Header<Res> read(@PathVariable Long id) {
+           return baseService.read(id);
+       }
+   
+       @Override
+       @PutMapping("")
+       public Header<Res> update(@RequestBody Header<Req> request) {
+           return baseService.update(request);
+       }
+   
+       @Override
+       @DeleteMapping("{id}")
+       public Header delete(@PathVariable Long id) {
+           return baseService.delete(id);
+       }
+   }
+   ```
+
+   CrudController에서 해당 Entity Request와 Response,Entity를 받아서 BaseService에도 넘겨줍니다. 여기서 중요한건 빈을 주입하는 시점은 객체들을 만드는 시점보다 이전에 주입을 하기 때문에 (....이 부부은 자신이 없군.... 찾아보고 다시 작성하기)<br>아무튼!! 1번에 있는 BaseService코드에 정보를 넘겨주면 해당 LogicService에서 상속을 받아 사용할 수 있게 해준다. 그리고 CrudController에서 implents하였던 CrudInterface에 맞게 create, read,update, delete를 따라 코드가 진행된다. **또한 BaseService에서는 CrudeInterface를 implements를 하였는데 왜 재정의를 해주지 않았냐고 하면 ApiLogicService는 해당 클래스에서 다 다른 코드로 구현하기 때문에 BaseService클래스에서 재정의를 하지 않아도 됩니다.** <br>
+
+#### 정리를하자면
+
+1. ItemApiController로 타고 들어와서 상속한 CrudController로 들어가게 됩니다. 그러면 ItemApiController에서 넘겨받은 제네릭 정보들로 BaseService로 정보를 넘겨주고 빈을 주입받습니다. 그리고 Controller에서 read를 받았으면 baseService.read(id)로 타고 가게 됩니다. 넘거가게 되면 BaseService에서 JpaRepository를 해당 객체 즉  ItemRepository를 baseRepositoy로 사용할 수 있게 되고 ItemApiLogicService에서 BaseService에서 빈으로 주입 받은 ItemRepository를 ItemRepository대신 사용합니다.
+
+
