@@ -17,10 +17,5 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class ItemApiController extends CrudController<ItemApiRequest,ItemApiResponse, Item> {
 
-    private final ItemApiLogicService itemApiLogicService;
 
-    @PostConstruct
-    public void init(){
-        this.baseService = itemApiLogicService;
-    }
 }
