@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class AdminUserApiService implements CrudInterface<AdminUserApiRequest, AdminUserApiResponse> {
+public class AdminUserApiService extends BaseService<AdminUserApiRequest, AdminUserApiResponse,AdminUser> {
 
-    @Autowired
-    private AdminUserRepository adminUserRepository;
     @Override
     public Header<AdminUserApiResponse> create(Header<AdminUserApiRequest> request) {
         AdminUserApiRequest body = request.getData();
@@ -29,14 +27,14 @@ public class AdminUserApiService implements CrudInterface<AdminUserApiRequest, A
                 .registeredAt(LocalDateTime.now())
                 .unregisteredAt(null)
                 .build();
-        AdminUser saveUser = adminUserRepository.save(adminUser);
+        AdminUser saveUser = baseRepository.save(adminUser);
 
         return response(saveUser);
     }
 
     @Override
     public Header<AdminUserApiResponse> read(Long id) {
-        return adminUserRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(adminUser -> response(adminUser))
                 .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
@@ -44,14 +42,14 @@ public class AdminUserApiService implements CrudInterface<AdminUserApiRequest, A
     @Override
     public Header<AdminUserApiResponse> update(Header<AdminUserApiRequest> request) {
         AdminUserApiRequest body = request.getData();
-        Optional<AdminUser> byId = adminUserRepository.findById(body.getId());
+        Optional<AdminUser> byId = baseRepository.findById(body.getId());
         Optional<String> userPassword = byId.map(adminUser -> {
             return adminUser.getPassword();
         });
         if (userPassword != null) {
             if (!body.getPassword().equals(userPassword)){
                 System.out.println("비밀번호 바꾸기");
-                return adminUserRepository.findById(body.getId())
+                return baseRepository.findById(body.getId())
                         .map(adminUser -> {
                             adminUser
                                     .setAccount(body.getAccount())
@@ -62,14 +60,14 @@ public class AdminUserApiService implements CrudInterface<AdminUserApiRequest, A
                                     .setPasswordUpdatedAt(LocalDateTime.now());
                             return adminUser;
                         })
-                        .map(newAdminUser -> adminUserRepository.save(newAdminUser))
+                        .map(newAdminUser -> baseRepository.save(newAdminUser))
                         .map(adminUser -> response(adminUser))
                         .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
             }
         }
 
         System.out.println("비밀번호 안바꾸기");
-        return adminUserRepository.findById(body.getId())
+        return baseRepository.findById(body.getId())
                 .map(adminUser -> {
                     adminUser
                             .setAccount(adminUser.getAccount())
@@ -78,7 +76,7 @@ public class AdminUserApiService implements CrudInterface<AdminUserApiRequest, A
                             .setRole(adminUser.getRole());
                     return adminUser;
                 })
-                .map(newAdminUser -> adminUserRepository.save(newAdminUser))
+                .map(newAdminUser -> baseRepository.save(newAdminUser))
                 .map(adminUser -> response(adminUser))
                 .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
 
@@ -86,9 +84,9 @@ public class AdminUserApiService implements CrudInterface<AdminUserApiRequest, A
 
     @Override
     public Header delete(Long id) {
-        return adminUserRepository.findById(id)
+        return baseRepository.findById(id)
                 .map(adminUser -> {
-                    adminUserRepository.delete(adminUser);
+                    baseRepository.delete(adminUser);
                     return Header.OK();
                 })
                 .orElseGet(() -> Header.ERROR("데이터가 없습니다."));

@@ -3,6 +3,7 @@ package me.jangjangyi.study.controller.api;
 import lombok.RequiredArgsConstructor;
 import me.jangjangyi.study.controller.CrudController;
 import me.jangjangyi.study.ifs.CrudInterface;
+import me.jangjangyi.study.model.entity.OrderGroup;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.OrderGroupApiRequest;
 import me.jangjangyi.study.model.network.response.OrderGroupApiReponse;
@@ -15,12 +16,6 @@ import javax.annotation.PostConstruct;
 @RestController
 @RequestMapping("/api/orderGroup")
 @RequiredArgsConstructor
-public class OrderGroupApiController extends CrudController<OrderGroupApiRequest, OrderGroupApiReponse> {
+public class OrderGroupApiController extends CrudController<OrderGroupApiRequest, OrderGroupApiReponse, OrderGroup> {
 
-    private final OrderGroupApiLogicService orderGroupApiLogicService;
-
-    @PostConstruct
-    public void init() {
-        this.baseService = orderGroupApiLogicService;
-    }
 }

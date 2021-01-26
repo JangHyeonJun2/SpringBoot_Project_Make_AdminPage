@@ -3,6 +3,7 @@ package me.jangjangyi.study.controller.api;
 import lombok.RequiredArgsConstructor;
 import me.jangjangyi.study.controller.CrudController;
 import me.jangjangyi.study.ifs.CrudInterface;
+import me.jangjangyi.study.model.entity.Category;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.CategoryApiRequest;
 import me.jangjangyi.study.model.network.response.CategoryApiResponse;
@@ -14,12 +15,7 @@ import javax.annotation.PostConstruct;
 @RestController
 @RequestMapping("/api/category")
 @RequiredArgsConstructor
-public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse> {
+public class CategoryApiController extends CrudController<CategoryApiRequest, CategoryApiResponse, Category> {
 
-    private final CategoryApiService categoryApiService;
 
-    @PostConstruct
-    public void init() {
-        this.baseService = categoryApiService;
-    }
 }

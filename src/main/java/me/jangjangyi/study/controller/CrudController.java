@@ -2,11 +2,14 @@ package me.jangjangyi.study.controller;
 
 import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.network.Header;
+import me.jangjangyi.study.service.BaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-public abstract class CrudController<Req,Res> implements CrudInterface<Req,Res> {
+public abstract class CrudController<Req,Res,Entity> implements CrudInterface<Req,Res> {
 
-    protected CrudInterface<Req,Res> baseService;
+    @Autowired(required = false)
+    protected BaseService<Req,Res,Entity> baseService;
 
     @Override
     @PostMapping("")

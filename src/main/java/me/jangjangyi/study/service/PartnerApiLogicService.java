@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, PartnerApiReponse> {
-    @Autowired
-    PartnerRepository partnerRepository;
+public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiReponse,Partner> {
+
     @Autowired
     CategoryRepository categoryRepository;
 
@@ -34,20 +33,20 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 .category(categoryRepository.getOne(body.getCategoryId()))
                 .build();
 
-        Partner newPartner = partnerRepository.save(partner);
+        Partner newPartner = baseRepository.save(partner);
 
         return response(newPartner);
     }
 
     @Override
     public Header<PartnerApiReponse> read(Long id) {
-        return partnerRepository.findById(id).map(this::response).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+        return baseRepository.findById(id).map(this::response).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
     @Override
     public Header<PartnerApiReponse> update(Header<PartnerApiRequest> request) {
         PartnerApiRequest body = request.getData();
-        return partnerRepository.findById(body.getId()).map(partner -> {
+        return baseRepository.findById(body.getId()).map(partner -> {
             partner
                     .setName(body.getName())
                     .setStatus(body.getStatus())
@@ -60,13 +59,13 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                     .setCeoName(body.getCeoName())
                     .setCategory(categoryRepository.getOne(body.getCategoryId()));
             return partner;
-        }).map(newPartner -> partnerRepository.save(newPartner)).map(partner -> response(partner)).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
+        }).map(newPartner -> baseRepository.save(newPartner)).map(partner -> response(partner)).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
     @Override
     public Header delete(Long id) {
-        return partnerRepository.findById(id).map(partner -> {
-            partnerRepository.delete(partner);
+        return baseRepository.findById(id).map(partner -> {
+            baseRepository.delete(partner);
             return Header.OK();
         }).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
