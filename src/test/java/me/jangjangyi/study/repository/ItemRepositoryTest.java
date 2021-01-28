@@ -1,6 +1,7 @@
 package me.jangjangyi.study.repository;
 
 import me.jangjangyi.study.model.entity.Item;
+import me.jangjangyi.study.model.enumclass.ItemStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ class ItemRepositoryTest {
     @Test
     public void create() {
         Item item = new Item();
-        item.setStatus("UNREGISTERED");
+        item.setStatus(ItemStatus.REGISTERED);
         item.setName("IPhone");
         item.setTitle("IPhone12 Pro");
         item.setContent("21년형");

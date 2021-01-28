@@ -2,6 +2,7 @@ package me.jangjangyi.study.repository;
 
 import me.jangjangyi.study.model.entity.Item;
 import me.jangjangyi.study.model.entity.User;
+import me.jangjangyi.study.model.enumclass.UserStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserRepositoryTest {
     public void create() {
         String account = "Test02";
         String password = "Test02";
-        String status = "REGISTERED";
+        UserStatus status = UserStatus.REGISTERED;
         String email = "Test01@naver.com";
         String phoneNumber = "010-222-3333";
         LocalDateTime registeredAt = LocalDateTime.now();
