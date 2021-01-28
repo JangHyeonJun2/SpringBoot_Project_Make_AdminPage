@@ -1,11 +1,13 @@
 package me.jangjangyi.study.controller;
 
+
+import lombok.extern.slf4j.Slf4j;
 import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@Slf4j
 public abstract class CrudController<Req,Res,Entity> implements CrudInterface<Req,Res> {
 
     @Autowired(required = false)

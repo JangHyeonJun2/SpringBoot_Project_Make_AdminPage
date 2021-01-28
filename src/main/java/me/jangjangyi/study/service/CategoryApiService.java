@@ -4,9 +4,12 @@ import me.jangjangyi.study.model.entity.Category;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.CategoryApiRequest;
 import me.jangjangyi.study.model.network.response.CategoryApiResponse;
+import me.jangjangyi.study.model.network.response.UserApiResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CategoryApiService extends BaseService<CategoryApiRequest, CategoryApiResponse,Category> {
@@ -60,4 +63,6 @@ public class CategoryApiService extends BaseService<CategoryApiRequest, Category
                 .build();
         return Header.OK(body);
     }
+
+
 }

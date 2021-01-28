@@ -4,11 +4,14 @@ import me.jangjangyi.study.model.entity.Item;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.ItemApiRequest;
 import me.jangjangyi.study.model.network.response.ItemApiResponse;
+import me.jangjangyi.study.model.network.response.UserApiResponse;
 import me.jangjangyi.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiResponse,Item> {
@@ -99,4 +102,6 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiRespo
 
         return Header.OK(body);
     }
+
+
 }

@@ -4,11 +4,14 @@ import me.jangjangyi.study.model.entity.Partner;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.PartnerApiRequest;
 import me.jangjangyi.study.model.network.response.PartnerApiReponse;
+import me.jangjangyi.study.model.network.response.UserApiResponse;
 import me.jangjangyi.study.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiReponse,Partner> {
@@ -83,4 +86,6 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
                 .build();
         return Header.OK(body);
     }
+
+
 }
