@@ -2,13 +2,13 @@
 # 상품 관련 Admin페이지 제작 프로젝트입니다.
 # JPA 개발 순서
 
-1. ERD 설계
-2. Table 생성
-3. Entity 생성
-4. Repository 생성
-5. Repository 테스트
-6. 연관관계 설정
-7. 필요한 Query Method 생성
+1. ERD 설계.
+2. Table 생성.
+3. Entity 생성.
+4. Repository 생성.
+5. Repository 테스트.
+6. 연관관계 설정.
+7. 필요한 Query Method 생성.
 
 
 
