@@ -160,7 +160,8 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                     // item api response
                     List<ItemApiResponse> itemApiResponseList = orderGroup.getOrderDetailList().stream()
                             .map(orderDetail -> orderDetail.getItem())
-                            .map(item -> itemApiLogicService.response(item).getData())
+                            .map(item -> itemApiLogicService.response(item))
+                            .map(itemApiResponse -> Header.OK(itemApiResponse).getData())
                             .collect(Collectors.toList());
 
                     orderGroupApiReponse.setItemApiResponseList(itemApiResponseList);
