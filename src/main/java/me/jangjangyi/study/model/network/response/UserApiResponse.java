@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import me.jangjangyi.study.model.enumclass.UserStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,4 +30,6 @@ public class UserApiResponse {
     private LocalDateTime registeredAt;
 
     private LocalDateTime unregisteredAt;
+
+    private List<OrderGroupApiReponse> orderGroupApiReponseList;
 }
