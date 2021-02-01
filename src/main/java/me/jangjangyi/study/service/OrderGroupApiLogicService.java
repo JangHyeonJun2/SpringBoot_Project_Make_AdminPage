@@ -2,16 +2,19 @@ package me.jangjangyi.study.service;
 
 import me.jangjangyi.study.model.entity.OrderGroup;
 import me.jangjangyi.study.model.network.Header;
+import me.jangjangyi.study.model.network.Pagination;
 import me.jangjangyi.study.model.network.request.OrderGroupApiRequest;
 import me.jangjangyi.study.model.network.response.OrderGroupApiReponse;
 import me.jangjangyi.study.model.network.response.UserApiResponse;
 import me.jangjangyi.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest, OrderGroupApiReponse,OrderGroup> {
@@ -37,13 +40,14 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
         OrderGroup newOrderGroup = baseRepository.save(orderGroup);
 
-        return response(newOrderGroup);
+        return Header.OK(response(newOrderGroup));
     }
 
     @Override
     public Header<OrderGroupApiReponse> read(Long id) {
         return baseRepository.findById(id)
                 .map(this::response)
+                .map(orderGroupApiReponse -> Header.OK(orderGroupApiReponse))
                 .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
 
     }
@@ -70,6 +74,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                 })
                 .map(orderGroup -> baseRepository.save(orderGroup))
                 .map(orderGroup -> response(orderGroup))
+                .map(orderGroupApiReponse -> Header.OK(orderGroupApiReponse))
                 .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
 
     }
@@ -88,11 +93,22 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
     @Override
     public Header search(Pageable pageable) {
-        return null;
+        Page<OrderGroup> orderGroups = baseRepository.findAll(pageable);
+        List<OrderGroupApiReponse> orderGroupApiReponseList = orderGroups.stream()
+                .map(orderGroup -> response(orderGroup))
+                .collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalElements(orderGroups.getTotalElements())
+                .totalPages(orderGroups.getTotalPages())
+                .currentElements(orderGroups.getNumber())
+                .currentPage(orderGroups.getNumberOfElements())
+                .build();
+        return Header.OK(orderGroupApiReponseList,pagination);
     }
 
-    public Header<OrderGroupApiReponse> response(OrderGroup orderGroup) {
-        OrderGroupApiReponse body = OrderGroupApiReponse.builder()
+    public OrderGroupApiReponse response(OrderGroup orderGroup) {
+        OrderGroupApiReponse orderGroupApiReponse = OrderGroupApiReponse.builder()
                                             .id(orderGroup.getId())
                                             .status(orderGroup.getStatus())
                                             .orderType(orderGroup.getOrderType().getTitle())
@@ -105,7 +121,7 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
                                             .arrivalDate(orderGroup.getArrivalDate())
                                             .userId(orderGroup.getUser().getId())
                                             .build();
-        return Header.OK(body);
+        return orderGroupApiReponse;
     }
 
 
