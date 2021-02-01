@@ -82,6 +82,11 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest,ItemApiRespo
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
+    @Override
+    public Header search(Pageable pageable) {
+        return null;
+    }
+
     public Header<ItemApiResponse> response(Item item) {
 
 

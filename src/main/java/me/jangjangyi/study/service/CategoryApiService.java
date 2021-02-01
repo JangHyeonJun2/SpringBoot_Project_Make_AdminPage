@@ -55,6 +55,11 @@ public class CategoryApiService extends BaseService<CategoryApiRequest, Category
 
     }
 
+    @Override
+    public Header search(Pageable pageable) {
+        return null;
+    }
+
     private Header<CategoryApiResponse> response(Category category) {
         CategoryApiResponse body = CategoryApiResponse.builder()
                 .id(category.getId())

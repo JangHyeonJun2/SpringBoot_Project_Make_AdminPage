@@ -26,12 +26,7 @@ public class UserApiController extends CrudController<UserApiRequest,UserApiResp
 
     private final UserApiLogicService userApiLogicService;
 
-    //페이징 처리
-    @GetMapping("")
-    public Header<List<UserApiResponse>> search(@PageableDefault(sort = "id",direction = Sort.Direction.ASC, size = 15) Pageable pageable) {
-        log.info("{}",pageable);
-        return userApiLogicService.search(pageable);
-    }
+
 
 
     @GetMapping("/{id}/orderInfo")

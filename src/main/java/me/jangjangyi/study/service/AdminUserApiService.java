@@ -4,6 +4,7 @@ import me.jangjangyi.study.model.entity.AdminUser;
 import me.jangjangyi.study.model.network.Header;
 import me.jangjangyi.study.model.network.request.AdminUserApiRequest;
 import me.jangjangyi.study.model.network.response.AdminUserApiResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -89,6 +90,11 @@ public class AdminUserApiService extends BaseService<AdminUserApiRequest, AdminU
                 .orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
+    @Override
+    public Header search(Pageable pageable) {
+        return null;
+    }
+
     private Header<AdminUserApiResponse> response(AdminUser adminUser) {
         AdminUserApiResponse body = AdminUserApiResponse.builder()
                 .id(adminUser.getId())
@@ -104,4 +110,5 @@ public class AdminUserApiService extends BaseService<AdminUserApiRequest, AdminU
                 .build();
         return Header.OK(body);
     }
+
 }

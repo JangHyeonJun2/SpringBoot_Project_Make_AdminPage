@@ -74,6 +74,11 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
         }).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
+    @Override
+    public Header search(Pageable pageable) {
+        return null;
+    }
+
 
     private Header<OrderDetailApiReponse> response(OrderDetail orderDetail){
         OrderDetailApiReponse body = OrderDetailApiReponse.builder()

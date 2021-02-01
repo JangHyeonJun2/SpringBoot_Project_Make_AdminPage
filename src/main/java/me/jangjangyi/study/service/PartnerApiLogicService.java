@@ -71,6 +71,11 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
         }).orElseGet(() -> Header.ERROR("데이터가 없습니다."));
     }
 
+    @Override
+    public Header search(Pageable pageable) {
+        return null;
+    }
+
     private Header<PartnerApiReponse> response(Partner partner) {
         PartnerApiReponse body = PartnerApiReponse.builder()
                 .id(partner.getId())

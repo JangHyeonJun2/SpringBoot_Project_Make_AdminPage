@@ -85,6 +85,12 @@ public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest,
 
     }
 
+
+    @Override
+    public Header search(Pageable pageable) {
+        return null;
+    }
+
     public Header<OrderGroupApiReponse> response(OrderGroup orderGroup) {
         OrderGroupApiReponse body = OrderGroupApiReponse.builder()
                                             .id(orderGroup.getId())

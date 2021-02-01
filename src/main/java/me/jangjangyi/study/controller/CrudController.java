@@ -4,9 +4,16 @@ package me.jangjangyi.study.controller;
 import lombok.extern.slf4j.Slf4j;
 import me.jangjangyi.study.ifs.CrudInterface;
 import me.jangjangyi.study.model.network.Header;
+import me.jangjangyi.study.model.network.response.UserApiResponse;
 import me.jangjangyi.study.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @Slf4j
 public abstract class CrudController<Req,Res,Entity> implements CrudInterface<Req,Res> {
 
@@ -35,5 +42,13 @@ public abstract class CrudController<Req,Res,Entity> implements CrudInterface<Re
     @DeleteMapping("{id}")
     public Header delete(@PathVariable Long id) {
         return baseService.delete(id);
+    }
+
+    //페이징 처리
+    @Override
+    @GetMapping("")
+    public Header<List<UserApiResponse>> search(@PageableDefault(sort = "id",direction = Sort.Direction.ASC, size = 15) Pageable pageable) {
+        log.info("{}",pageable);
+        return baseService.search(pageable);
     }
 }
